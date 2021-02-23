@@ -36,6 +36,7 @@ from keras.utils import control_flow_util
 from keras.utils import data_utils
 from keras.utils import dataset_creator
 from keras.utils import tf_utils
+from tensorflow.python.distribute import input_lib
 from tensorflow.python.platform import tf_logging as logging
 from tensorflow.python.util.tf_export import keras_export
 
@@ -547,7 +548,8 @@ class CompositeTensorDataAdapter(DataAdapter):
       # by DatasetAdapter and GeneratorAdapter.
       if (tf_utils.is_extension_type(v) and
           not isinstance(v, (tf.data.Dataset,
-                             tf.data.Iterator))):
+                             tf.data.Iterator,
+                             input_lib.DistributedDataset))):
         return True
       # Support Scipy sparse tensors if scipy is installed
       if scipy_sparse is not None and scipy_sparse.issparse(v):
